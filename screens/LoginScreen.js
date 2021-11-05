@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { KeyboardAvoidingView, StyleSheet, Text, View } from 'react-native'
 import { Button, Input, Image } from 'react-native-elements'
 
-const LoginScreen = () => {
+const LoginScreen = ({ navigation }) => {
 
     const [email, setEmail] = useState("");
     const [pass, setPass] = useState("");
@@ -18,6 +18,18 @@ const LoginScreen = () => {
         <KeyboardAvoidingView behavior='padding'
             style={styles.container}>
             <StatusBar style="light" />
+            <Text h1
+                style={
+                    {
+                        marginBottom: 50,
+                        color: "#03ACB5",
+                        textDecorationLine: "underline",
+                        fontSize: 25,
+                        fontWeight: 600
+                    }
+                }>
+                WELCOME! USER LOGIN
+            </Text>
             <Image source={{
                 uri: 'https://cdn.technologyadvice.com/wp-content/uploads/2018/02/friendly-chatbot.jpg'
             }}
@@ -32,12 +44,14 @@ const LoginScreen = () => {
                 <Input placeholder="Email"
                     autoFocus
                     type="Email"
+                    placeholderTextColor="#D0D0D0"
                     value={email}
                     onChangeText={(text) => setEmail(text)}
                 />
                 <Input placeholder="Password"
                     secureTextEntry
                     type="password"
+                    placeholderTextColor="#D0D0D0"
                     value={pass}
                     onChangeText={(text) => setPass(text)}
 
@@ -45,8 +59,16 @@ const LoginScreen = () => {
             </View>
             <Button
                 buttonStyle={{ backgroundColor: "#03ACB5", borderColor: "#03ACB5" }}
-                title='Login' containerStyle={styles.button} onPress={signIn} />
-            <Button title='Register' titleStyle={{color: "#03ACB5"}} buttonStyle={{borderColor: "#03ACB5" }} type="outline" containerStyle={styles.button}  />
+                title='Login'
+                containerStyle={styles.button}
+                onPress={signIn} />
+            <Button
+                onPress={() => navigation.navigate('Register')}
+                title='Register'
+                titleStyle={{ color: "#03ACB5" }}
+                buttonStyle={{ borderColor: "#03ACB5" }}
+                type="outline"
+                containerStyle={styles.button} />
             <View style={{ height: 100 }}></View>
         </KeyboardAvoidingView>
     )
