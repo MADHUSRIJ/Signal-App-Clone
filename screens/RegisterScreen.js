@@ -2,7 +2,11 @@ import React from 'react'
 import { StatusBar } from 'expo-status-bar'
 import { useState } from 'react'
 import { KeyboardAvoidingView, StyleSheet, Text, View } from 'react-native'
-import { Button,Input, Image } from 'react-native-elements'
+import { Button, Input, Image } from 'react-native-elements'
+import { auth } from '../firebase'
+import { dp } from '../firebase'
+import { createUserWithEmailAndPassword, updateProfile } from '@firebase/auth'
+import { doc, refEqual, setDoc } from '@firebase/firestore'
 
 const RegisterScreen = ({ navigation }) => {
 
@@ -11,7 +15,14 @@ const RegisterScreen = ({ navigation }) => {
     const [Pass, setPass] = useState("");
     const [Image, setImage] = useState("");
 
-    const register = () => {};
+    const register = () => {
+        createUserWithEmailAndPassword(auth, Email, Pass).then((authUser) => {
+          setDoc(doc(dp,"Database",authUser.user.uid),{
+                "Name" : Name,
+                "PhotoURL" : Image,
+            })
+        }).catch((error) => { alert(error) });
+    };
 
 
     return (
@@ -34,44 +45,44 @@ const RegisterScreen = ({ navigation }) => {
                     placeholder="Full Name"
                     autoFocus
                     type="text"
-                    value = {Name}
-                    onChangeText = {(text) => setName(text)}
+                    value={Name}
+                    onChangeText={(text) => setName(text)}
                     placeholderTextColor="#D0D0D0" />
                 <Input
                     placeholder="Email"
                     type="email"
-                    value = {Email}
-                    onChangeText = {(text) => setEmail(text)}
+                    value={Email}
+                    onChangeText={(text) => setEmail(text)}
                     placeholderTextColor="#D0D0D0" />
                 <Input
                     placeholder="Password"
                     type="password"
-                    value = {Pass}
+                    value={Pass}
                     secureTextEntry
-                    onChangeText = {(text)=> setPass(text)}
+                    onChangeText={(text) => setPass(text)}
                     placeholderTextColor="#D0D0D0" />
                 <Input
                     placeholder="Profile Picture URL (optional)"
                     type="text"
-                    value = {Image}
-                    onChangeText = {(text)=> setImage(text)}
+                    value={Image}
+                    onChangeText={(text) => setImage(text)}
                     placeholderTextColor="#D0D0D0"
-                    onSubmitEditing = {register}
+                    onSubmitEditing={register}
 
-                     />
+                />
             </View>
-            <Button 
-            style = {styles.button}
-            buttonStyle = {{
-                backgroundColor: "#03ACB5",
-                borderColor: "#03ACB5"
-                
-            }}
-            titleStyle = {{
-                color: "white"
-            }}
-             title="Submit" 
-             onPress={register}/>
+            <Button
+                style={styles.button}
+                buttonStyle={{
+                    backgroundColor: "#03ACB5",
+                    borderColor: "#03ACB5"
+
+                }}
+                titleStyle={{
+                    color: "white"
+                }}
+                title="Submit"
+                onPress={register} />
         </KeyboardAvoidingView>
     )
 }
